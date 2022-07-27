@@ -21,7 +21,9 @@ exports.getAllPackages = async (req, res) => {
     const packages = await Package.find(
       {},
       { createdAt: 0, updatedAt: 0, _id: 0 }
-    ).populate("deliveredBy","firstName lastName").sort({ updatedAt: -1 });
+    )
+      .populate("deliveredBy", "firstName lastName")
+      .sort({ updatedAt: -1 });
     if (packages.length > 0) {
       res.status(200).json({ packages });
     } else {
@@ -57,4 +59,19 @@ exports.deletePackage = async (req, res) => {
   } catch (err) {
     res.status(400).json({ err });
   }
+};
+exports.updatePackageStatus = async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+  Package.findOneAndUpdate({ id }, { status: status }, (err) => {
+    if (err) {
+      res.status(400).json({
+        err,
+      });
+    } else {
+      res.status(204).json({
+        message: "Package updated Successfully.",
+      });
+    }
+  });
 };
