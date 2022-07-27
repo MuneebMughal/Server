@@ -3,7 +3,6 @@ exports.sendDrivers = async (req, res) => {
   try {
     const drivers = await User.find({ role: "driver" });
     if (drivers && drivers.length > 0) {
-      console.log(drivers);
       res.status(200).json({
         drivers,
       });
