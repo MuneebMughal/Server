@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema(
       index: true,
       unique: true,
       trim: true,
+      lowercase: true,
     },
     id: { type: String, unique: true, required: true },
     score: { type: mongoose.Types.Decimal128 },

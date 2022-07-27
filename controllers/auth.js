@@ -37,7 +37,7 @@ exports.createUser = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const existedUser = await User.findOne({ email });
+    const existedUser = await User.findOne({ email: email.toLowerCase() });
     if (existedUser) {
       bcrypt.compare(password, existedUser.password).then((result) => {
         if (result) {
