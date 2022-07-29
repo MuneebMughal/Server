@@ -12,9 +12,9 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
     },
     id: { type: String, unique: true, required: true },
-    score: { type: mongoose.Types.Decimal128 },
+    score: { type: Number, default: 0 },
     status: { type: String, enum: ["onDelivery", "offDelivery"] },
-    warning: { type: String, enum: ["high", "medium", "low"] },
+    warning: { type: String, enum: ["high", "medium", "low"], default: "low" },
     role: {
       type: String,
       enum: ["admin", "driver", "cc"],

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { ObjectId } = mongoose.Schema;
 const userSchema = new mongoose.Schema(
   {
     severity: { type: String, enum: ["high", "medium", "low"] },
@@ -9,6 +10,10 @@ const userSchema = new mongoose.Schema(
       maxlength: 2000,
     },
     id: { type: String, unique: true, required: true },
+    generatedBy: {
+      type: ObjectId,
+      ref: "User",
+    },
   },
   { timestamps: true }
 );
