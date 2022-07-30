@@ -129,6 +129,7 @@ exports.getDriversPackages = async (req, res) => {
           Driver.id = driver.id;
           Driver.firstName = driver.firstName;
           Driver.lastName = driver.lastName;
+          Driver.lastLocation = driver.lastLocation;
           const { _id } = driver;
           await Package.find({
             deliveredBy: _id,
@@ -154,4 +155,39 @@ exports.getDriversPackages = async (req, res) => {
   }
 };
 
-const findPackages = async (drivers) => {};
+exports.updatePackageLocation = async (req, res) => {
+  const { id } = req.params;
+  const { location } = req.body;
+  if (location.hasOwnProperty("lat") && location.hasOwnProperty("lng")) {
+    Package.findOneAndUpdate({ id }, { lastLocation: location }, (err, pkg) => {
+      if (err) {
+        res.status(400).json({
+          err,
+        });
+      } else {
+        res.status(204).json({
+          message: "Location updated Successfully.",
+        });
+      }
+    });
+  } else {
+    res.status(400).json({
+      message: "Some coordinate is missing.",
+    });
+  }
+};
+exports.updatePackageRTA = async (req, res) => {
+  const { id } = req.params;
+  const { RTA } = req.body;
+  Package.findOneAndUpdate({ id }, { RTA: RTA }, (err, pkg) => {
+    if (err) {
+      res.status(400).json({
+        err,
+      });
+    } else {
+      res.status(204).json({
+        message: "RTA updated Successfully.",
+      });
+    }
+  });
+};

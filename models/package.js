@@ -13,18 +13,10 @@ const userSchema = new mongoose.Schema(
     EDD: { type: Date, required: true },
     RTA: { type: String, required: true },
     id: { type: String, unique: true, required: true },
-    // location: {
-    //   type: {
-    //     type: String,
-    //     enum: ["Point"],
-    //     required: true,
-    //   },
-    //   coordinates: {
-    //     type: [Number],
-    //     required: true,
-    //   },
-    // },
-    location: [],
+    lastLocation: {
+      lat: { type: Number },
+      lng: { type: Number },
+    },
     priority: {
       type: String,
       default: "low",
