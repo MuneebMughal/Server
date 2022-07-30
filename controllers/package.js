@@ -1,5 +1,6 @@
 const Package = require("../models/package");
-
+const User = require("../models/user");
+const moment = require("moment");
 exports.addPackage = async (req, res) => {
   try {
     const package = req.body;
@@ -32,7 +33,6 @@ exports.getAllPackages = async (req, res) => {
       });
     }
   } catch (err) {
-    console.log(err);
     res.status(400).json({
       err,
     });
@@ -74,4 +74,34 @@ exports.updatePackageStatus = async (req, res) => {
       });
     }
   });
+};
+exports.getDriverPackages = async (req, res) => {
+  try {
+    const { id } = req.params;
+    now = moment();
+    start = now.startOf("day").toISOString();
+    end = now.endOf("day").toISOString();
+    User.findOne({ id }).then((data) => {
+      if (data) {
+        const { _id } = data;
+        Package.find({
+          deliveredBy: _id,
+          EDD: { $gte: start, $lte: end },
+        }).then((packages) => {
+          res.status(200).json({
+            message: "success",
+            packages,
+          });
+        });
+      } else {
+        res.status(404).json({
+          message: "Driver Not Found.",
+        });
+      }
+    });
+  } catch (err) {
+    res.status(400).json({
+      err,
+    });
+  }
 };

@@ -41,7 +41,7 @@ exports.login = async (req, res) => {
     if (existedUser) {
       bcrypt.compare(password, existedUser.password).then((result) => {
         if (result) {
-          const user = _.omit(existedUser.toObject(), ["_id", "password"]);
+          const user = _.omit(existedUser.toObject(), [ "password"]);
           const accessToken = jwt.sign(user, process.env.JWT_ACCESS_SECRET, {
             expiresIn: "1d",
           });
