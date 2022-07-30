@@ -56,3 +56,24 @@ exports.deleteUser = async (req, res) => {
     res.status(400).json({ err });
   }
 };
+exports.updateUserLocation = async (req, res) => {
+  const { id } = req.params;
+  const { location } = req.body;
+  if (location.hasOwnProperty("lat") && location.hasOwnProperty("lng")) {
+    User.findOneAndUpdate({ id }, { lastLocation: location }, (err, user) => {
+      if (err) {
+        res.status(400).json({
+          err,
+        });
+      } else {
+        res.status(204).json({
+          message: "Location updated Successfully.",
+        });
+      }
+    });
+  } else {
+    res.status(400).json({
+      message: "Some coordinate is missing.",
+    });
+  }
+};
