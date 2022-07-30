@@ -105,3 +105,53 @@ exports.getDriverPackages = async (req, res) => {
     });
   }
 };
+exports.getDriversPackages = async (req, res) => {
+  try {
+    now = moment();
+    start = now.startOf("day").toISOString();
+    end = now.endOf("day").toISOString();
+    User.find(
+      { role: "driver" },
+      {
+        password: 0,
+        email: 0,
+        createdAt: 0,
+        updatedAt: 0,
+        role: 0,
+        score: 0,
+        warning: 0,
+      }
+    ).then(async (drivers) => {
+      if (drivers && drivers.length > 0) {
+        let Drivers = [];
+        for (driver of drivers) {
+          let Driver = {};
+          Driver.id = driver.id;
+          Driver.firstName = driver.firstName;
+          Driver.lastName = driver.lastName;
+          const { _id } = driver;
+          await Package.find({
+            deliveredBy: _id,
+            EDD: { $gte: start, $lte: end },
+          }).then((packages) => {
+            Driver.packages = packages;
+            Drivers.push(Driver);
+          });
+        }
+        res.status(200).json({
+          Drivers,
+        });
+      } else {
+        res.status(404).json({
+          message: "Driver Not Found.",
+        });
+      }
+    });
+  } catch (err) {
+    res.status(400).json({
+      err,
+    });
+  }
+};
+
+const findPackages = async (drivers) => {};
